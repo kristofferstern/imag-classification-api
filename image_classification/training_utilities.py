@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 
-from preprocessing_utilities import (
+from image_classification.preprocessing_utilities import (
     read_img_from_path,
     resize_img,
 )
@@ -19,7 +19,7 @@ def chunks(seq: list, size: int) -> list:
     return (seq[pos : pos + size] for pos in range(0, len(seq), size))
 
 
-def get_seq():
+def get_seq() -> iaa.Sequential:
     sometimes = lambda aug: iaa.Sometimes(0.1, aug)
     seq = iaa.Sequential(
         [
@@ -40,10 +40,10 @@ def get_seq():
 
 def batch_generator(
     list_samples,
-    batch_size=32,
+    batch_size: int = 32,
     pre_processing_function=None,
-    resize_size=(128, 128),
-    augment=False,
+    resize_size: tuple = (128, 128),
+    augment: bool = False,
 ):
     seq = get_seq()
     pre_processing_function = (
@@ -69,7 +69,11 @@ def batch_generator(
             yield X, Y
 
 
-def dataframe_to_list_samples(df, binary_targets, base_path, image_name_col):
+def dataframe_to_list_samples(
+        df,
+        binary_targets: str,
+        base_path: str,
+        image_name_col: str):
     paths = df[image_name_col].apply(lambda x: str(Path(base_path) / x)).tolist()
     targets = df[binary_targets].values.tolist()
 

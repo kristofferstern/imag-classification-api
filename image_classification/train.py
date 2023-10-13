@@ -12,7 +12,11 @@ from image_classification.training_utilities import (
 )
 
 
-def train_from_csv(csv_path: str, data_config_path: str, training_config_path: str):
+def train_from_csv(
+        csv_path: str,
+        data_config_path: str,
+        training_config_path: str) -> None:
+
     df = pd.read_csv(csv_path)
     train, val = train_test_split(df, test_size=0.2, random_state=1337)
     with open(data_config_path, "r") as f:
@@ -65,9 +69,9 @@ def train_from_csv(csv_path: str, data_config_path: str, training_config_path: s
 
 if __name__ == "__main__":
     """
-    python train.py --csv_path "../example/data.csv" \
-                    --data_config_path "../example/data_config.yaml" \
-                    --training_config_path "../example/training_config.yaml"
+    python train.py --csv_path "specific/data/data.csv" \
+                    --data_config_path "specific/config/data_config.yaml" \
+                    --training_config_path "specific/config/training_config.yaml"
     
     """
     parser = argparse.ArgumentParser()
@@ -75,12 +79,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--data_config_path",
         help="data_config_path",
-        default="../example/data_config.yaml",
+        default="specific/config/data_config.yaml",
     )
     parser.add_argument(
         "--training_config_path",
         help="training_config_path",
-        default="../example/training_config.yaml",
+        default="specific/config/training_config.yaml",
     )
     args = parser.parse_args()
 
