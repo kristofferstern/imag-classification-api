@@ -6,8 +6,8 @@ import numpy as np
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 
 from image_classification.preprocessing_utilities import (
-    read_img_from_path,
-    resize_img,
+    read_image_from_path,
+    resize_image,
 )
 import collections
 collections.Iterable = collections.abc.Iterable
@@ -20,18 +20,18 @@ def chunks(seq: list, size: int) -> list:
 
 
 def get_seq() -> iaa.Sequential:
-    sometimes = lambda aug: iaa.Sometimes(0.1, aug)
+    random_add_augmentation = lambda aug: iaa.Sometimes(0.1, aug)
     seq = iaa.Sequential(
         [
-            sometimes(iaa.Affine(scale={"x": (0.8, 1.2)})),
-            sometimes(iaa.Fliplr(p=0.5)),
-            sometimes(iaa.Affine(scale={"y": (0.8, 1.2)})),
-            sometimes(iaa.Affine(translate_percent={"x": (-0.2, 0.2)})),
-            sometimes(iaa.Affine(translate_percent={"y": (-0.2, 0.2)})),
-            sometimes(iaa.Affine(rotate=(-20, 20))),
-            sometimes(iaa.Affine(shear=(-20, 20))),
-            sometimes(iaa.AdditiveGaussianNoise(scale=0.07 * 255)),
-            sometimes(iaa.GaussianBlur(sigma=(0, 3.0))),
+            random_add_augmentation(iaa.Affine(scale={"x": (0.8, 1.2)})),
+            random_add_augmentation(iaa.Fliplr(p=0.5)),
+            random_add_augmentation(iaa.Affine(scale={"y": (0.8, 1.2)})),
+            random_add_augmentation(iaa.Affine(translate_percent={"x": (-0.2, 0.2)})),
+            random_add_augmentation(iaa.Affine(translate_percent={"y": (-0.2, 0.2)})),
+            random_add_augmentation(iaa.Affine(rotate=(-20, 20))),
+            random_add_augmentation(iaa.Affine(shear=(-20, 20))),
+            random_add_augmentation(iaa.AdditiveGaussianNoise(scale=0.07 * 255)),
+            random_add_augmentation(iaa.GaussianBlur(sigma=(0, 3.0))),
         ],
         random_order=True,
     )
@@ -54,12 +54,12 @@ def batch_generator(
     while True:
         shuffle(list_samples)
         for batch_samples in chunks(list_samples, size=batch_size):
-            images = [read_img_from_path(sample.path) for sample in batch_samples]
+            images = [read_image_from_path(sample.path) for sample in batch_samples]
 
             if augment:
                 images = seq.augment_images(images=images)
 
-            images = [resize_img(x, h=resize_size[0], w=resize_size[1]) for x in images]
+            images = [resize_image(x, h = resize_size[0], w = resize_size[1]) for x in images]
 
             images = [pre_processing_function(a) for a in images]
             targets = [sample.target_vector for sample in batch_samples]
@@ -74,6 +74,7 @@ def dataframe_to_list_samples(
         binary_targets: str,
         base_path: str,
         image_name_col: str):
+    
     paths = df[image_name_col].apply(lambda x: str(Path(base_path) / x)).tolist()
     targets = df[binary_targets].values.tolist()
 

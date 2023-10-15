@@ -2,4 +2,4 @@ use_augmentation: true
 batch_size: 32
 epochs: 1000
 initial_learning_rate: 0.0001
-model_path: "image_classification.h5"
+model_path: "image_classification_model.h5"
