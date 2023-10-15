@@ -9,7 +9,7 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.losses import binary_crossentropy, categorical_crossentropy
 from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers.legacy import Adam
 from tensorflow.keras.metrics import binary_accuracy
 
 

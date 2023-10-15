@@ -1,5 +1,4 @@
 import argparse
-import sys
 import typing
 import numpy as np
 import yaml

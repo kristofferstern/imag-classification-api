@@ -3,8 +3,6 @@ import yaml
 import argparse
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
-import sys
-print(sys.path)
 from image_classification.models import get_model_classification
 from image_classification.training_utilities import (
     dataframe_to_list_samples,
