@@ -1,0 +1,5 @@
+resize_shape: [224, 224]
+targets: ['healthy', 'neutral', 'unhealthy']
+model_path: "image_classification.h5"
+model_url: ""
+model_sha256: "3217dea295b5a578fae654a80596408bfd0a81822403d86d4ffd8de58e076168"
