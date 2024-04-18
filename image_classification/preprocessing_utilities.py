@@ -1,15 +1,15 @@
-import cv2
+from cv2 import imread, imdecode, resize, copyMakeBorder, IMREAD_COLOR, BORDER_CONSTANT
 import numpy as np
 
 
 def read_image_from_path(path: str) -> np.array:
-    img = cv2.imread(path, cv2.IMREAD_COLOR)
+    img = imread(path, IMREAD_COLOR)
     return img
 
 
 def read_image_from_file(file_object) -> np.array:
     arr = np.fromstring(file_object.read(), np.uint8)
-    img_np = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+    img_np = imdecode(arr, IMREAD_COLOR)
 
     return img_np
 
@@ -27,7 +27,7 @@ def resize_image(
 
     new_size = tuple([int(x * ratio) for x in orig_size])
 
-    im = cv2.resize(image, (new_size[1], new_size[0]))
+    im = resize(image, (new_size[1], new_size[0]))
 
     delta_w = desired_size_w - new_size[1]
     delta_h = desired_size_h - new_size[0]
@@ -36,8 +36,8 @@ def resize_image(
     left, right = delta_w // 2, delta_w - (delta_w // 2)
 
     color = [255, 255, 255]
-    new_image = cv2.copyMakeBorder(
-        im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color
+    new_image = copyMakeBorder(
+        im, top, bottom, left, right, BORDER_CONSTANT, value=color
     )
 
     return new_image
